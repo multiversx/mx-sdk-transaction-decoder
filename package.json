@@ -1,6 +1,6 @@
 {
   "name": "@elrondnetwork/transaction-decoder",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "description": "Transaction metadata decoder",
   "main": "lib/transaction.decoder.js",
   "types": "lib/transaction.decoder.d.ts",
@@ -23,7 +23,7 @@
     "decoder"
   ],
   "author": "ElrondNetwork",
-  "license": "GPL-3.0-or-later",
+  "license": "MIT",
   "devDependencies": {
     "@babel/core": "^7.17.8",
     "@babel/preset-env": "^7.16.11",

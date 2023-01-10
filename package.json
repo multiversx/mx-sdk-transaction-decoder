@@ -1,6 +1,6 @@
 {
   "name": "@multiversx/transaction-decoder",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Transaction metadata decoder",
   "main": "lib/transaction.decoder.js",
   "types": "lib/transaction.decoder.d.ts",

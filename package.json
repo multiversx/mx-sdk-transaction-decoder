@@ -1,5 +1,5 @@
 {
-  "name": "@elrondnetwork/transaction-decoder",
+  "name": "@multiversx/transaction-decoder",
   "version": "1.0.0",
   "description": "Transaction metadata decoder",
   "main": "lib/transaction.decoder.js",
@@ -15,14 +15,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ElrondNetwork/transaction-decoder.git"
+    "url": "git+https://github.com/multiversx/mx-sdk-transaction-decoder"
   },
   "keywords": [
-    "elrond",
+    "multiversx",
     "transaction",
     "decoder"
   ],
-  "author": "ElrondNetwork",
+  "author": "MultiversX",
   "license": "MIT",
   "devDependencies": {
     "@babel/core": "^7.17.8",

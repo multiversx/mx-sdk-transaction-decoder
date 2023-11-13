@@ -104,8 +104,7 @@ export class TransactionDecoder {
       const identifier = this.hexToString(args[index++]);
       const nonce = args[index++];
       const value = this.hexToBigInt(args[index++]);
-
-      if (nonce) {
+      if (nonce && this.hexToNumber(nonce) > 0) {
         result.transfers.push({
           value,
           properties: {

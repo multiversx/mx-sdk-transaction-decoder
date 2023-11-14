@@ -90,3 +90,69 @@ test('ESDT Transfer', () => {
     ],
   });
 });
+
+test('MultiESDTNFTTransfer fungible (with 00 nonce) + meta', () => {
+  const decoder = new TransactionDecoder();
+  const metadata = decoder.getTransactionMetadata({
+    sender: 'erd1lkrrrn3ws9sp854kdpzer9f77eglqpeet3e3k3uxvqxw9p3eq6xqxj43r9',
+    receiver: 'erd1lkrrrn3ws9sp854kdpzer9f77eglqpeet3e3k3uxvqxw9p3eq6xqxj43r9',
+    data: 'TXVsdGlFU0RUTkZUVHJhbnNmZXJAMDAwMDAwMDAwMDAwMDAwMDA1MDBkZjNiZWJlMWFmYTEwYzQwOTI1ZTgzM2MxNGE0NjBlMTBhODQ5ZjUwYTQ2OEAwMkA0YzRiNGQ0NTU4MmQ2MTYxNjIzOTMxMzBAMmZlM2IwQDA5Yjk5YTZkYjMwMDI3ZTRmM2VjQDU1NTM0NDQzMmQzMzM1MzA2MzM0NjVAMDBAMDEyNjMwZTlhMjlmMmY5MzgxNDQ5MUA3MDYxNzk1ZjZkNjU3NDYxNWY2MTZlNjQ1ZjY2NzU2ZTY3Njk2MjZjNjVAMGVkZTY0MzExYjhkMDFiNUA=',
+    value: '0',
+  });
+
+  expect(metadata).toEqual<TransactionMetadata>({
+    sender: 'erd1lkrrrn3ws9sp854kdpzer9f77eglqpeet3e3k3uxvqxw9p3eq6xqxj43r9',
+    receiver: 'erd1qqqqqqqqqqqqqpgqmua7hcd05yxypyj7sv7pffrquy9gf86s535qxct34s',
+    value: BigInt('0'),
+    functionName: 'pay_meta_and_fungible',
+    functionArgs: [
+      '0ede64311b8d01b5',
+      '',
+    ],
+    transfers: [
+      {
+        value: BigInt('45925073746530627023852'),
+        properties: {
+          collection: 'LKMEX-aab910',
+          identifier: 'LKMEX-aab910-2fe3b0',
+        },
+      },
+      {
+        value: BigInt('1389278024872597502641297'),
+        properties: {
+          token: 'USDC-350c4e',
+        },
+      },
+    ],
+  });
+});
+
+test('MultiESDTNFTTransfer fungibles (00 and missing nonce)', () => {
+  const decoder = new TransactionDecoder();
+  const metadata = decoder.getTransactionMetadata({
+    sender: 'erd1lkrrrn3ws9sp854kdpzer9f77eglqpeet3e3k3uxvqxw9p3eq6xqxj43r9',
+    receiver: 'erd1lkrrrn3ws9sp854kdpzer9f77eglqpeet3e3k3uxvqxw9p3eq6xqxj43r9',
+    data: 'TXVsdGlFU0RUTkZUVHJhbnNmZXJAMDAwMDAwMDAwMDAwMDAwMDA1MDBkZjNiZWJlMWFmYTEwYzQwOTI1ZTgzM2MxNGE0NjBlMTBhODQ5ZjUwYTQ2OEAwMkA1MjQ5NDQ0NTJkMzAzNTYyMzE2MjYyQDAwQDA5Yjk5YTZkYjMwMDI3ZTRmM2VjQDU1NTM0NDQzMmQzMzM1MzA2MzM0NjVAQDAxMjYzMGU5YTI5ZjJmOTM4MTQ0OTE=',
+    value: '0',
+  });
+
+  expect(metadata).toEqual<TransactionMetadata>({
+    sender: 'erd1lkrrrn3ws9sp854kdpzer9f77eglqpeet3e3k3uxvqxw9p3eq6xqxj43r9',
+    receiver: 'erd1qqqqqqqqqqqqqpgqmua7hcd05yxypyj7sv7pffrquy9gf86s535qxct34s',
+    value: BigInt('0'),
+    transfers: [
+      {
+        value: BigInt('45925073746530627023852'),
+        properties: {
+          token: 'RIDE-05b1bb',
+        },
+      },
+      {
+        value: BigInt('1389278024872597502641297'),
+        properties: {
+          token: 'USDC-350c4e',
+        },
+      },
+    ],
+  });
+});

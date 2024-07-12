@@ -28,6 +28,11 @@ export class TransactionDecoder {
     metadata.receiver = transaction.receiver;
     metadata.value = BigInt(transaction.value);
 
+    if (!transaction.data) {
+      metadata.functionName = 'transfer';
+      metadata.functionArgs = undefined;
+    }
+
     if (transaction.data) {
       const decodedData = this.base64Decode(transaction.data);
 

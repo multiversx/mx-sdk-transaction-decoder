@@ -39,6 +39,11 @@ export class TransactionDecoder {
         metadata.functionArgs = args;
       }
 
+      if (args.length === 0) {
+        metadata.functionName = 'transfer';
+        metadata.functionArgs = undefined;
+      }
+
       if (metadata.functionName === 'relayedTx' && metadata.functionArgs && metadata.functionArgs.length === 1) {
         try {
           const relayedTransaction = JSON.parse(this.hexToString(metadata.functionArgs[0]));

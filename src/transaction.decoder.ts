@@ -36,7 +36,6 @@ export class TransactionDecoder {
     }
 
     const decodedData = this.base64Decode(transaction.data);
-
     const dataComponents = decodedData.split('@');
 
     const args = dataComponents.slice(1);

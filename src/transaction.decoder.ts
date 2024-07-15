@@ -36,6 +36,7 @@ export class TransactionDecoder {
     }
 
     const decodedData = this.base64Decode(transaction.data);
+
     const dataComponents = decodedData.split('@');
 
     const args = dataComponents.slice(1);
@@ -57,7 +58,7 @@ export class TransactionDecoder {
         relayedTransaction.receiver = this.bech32Encode(this.base64ToHex(relayedTransaction.receiver));
         return this.getNormalTransactionMetadata(relayedTransaction);
       } catch (error) {
-        // nothing special
+        // nothing special 
       }
     }
 

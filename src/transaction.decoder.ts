@@ -31,48 +31,48 @@ export class TransactionDecoder {
     if (!transaction.data) {
       metadata.functionName = 'transfer';
       metadata.functionArgs = undefined;
+
+      return metadata;
     }
 
-    if (transaction.data) {
-      const decodedData = this.base64Decode(transaction.data);
+    const decodedData = this.base64Decode(transaction.data);
 
-      const dataComponents = decodedData.split('@');
+    const dataComponents = decodedData.split('@');
 
-      const args = dataComponents.slice(1);
-      if (args.every((x: any) => this.isSmartContractArgument(x))) {
-        metadata.functionName = dataComponents[0];
-        metadata.functionArgs = args;
+    const args = dataComponents.slice(1);
+    if (args.every((x: any) => this.isSmartContractArgument(x))) {
+      metadata.functionName = dataComponents[0];
+      metadata.functionArgs = args;
+    }
+
+    if (args.length === 0) {
+      metadata.functionName = 'transfer';
+      metadata.functionArgs = undefined;
+    }
+
+    if (metadata.functionName === 'relayedTx' && metadata.functionArgs && metadata.functionArgs.length === 1) {
+      try {
+        const relayedTransaction = JSON.parse(this.hexToString(metadata.functionArgs[0]));
+        relayedTransaction.value = relayedTransaction.value.toString();
+        relayedTransaction.sender = this.bech32Encode(this.base64ToHex(relayedTransaction.sender));
+        relayedTransaction.receiver = this.bech32Encode(this.base64ToHex(relayedTransaction.receiver));
+        return this.getNormalTransactionMetadata(relayedTransaction);
+      } catch (error) {
+        // nothing special
       }
+    }
 
-      if (args.length === 0) {
-        metadata.functionName = 'transfer';
-        metadata.functionArgs = undefined;
-      }
+    if (metadata.functionName === 'relayedTxV2' && metadata.functionArgs && metadata.functionArgs.length === 4) {
+      try {
+        const relayedTransaction = new TransactionToDecode();
+        relayedTransaction.sender = transaction.receiver;
+        relayedTransaction.receiver = this.bech32Encode(metadata.functionArgs[0]);
+        relayedTransaction.data = this.base64Encode(this.hexToString(metadata.functionArgs[2]));
+        relayedTransaction.value = '0';
 
-      if (metadata.functionName === 'relayedTx' && metadata.functionArgs && metadata.functionArgs.length === 1) {
-        try {
-          const relayedTransaction = JSON.parse(this.hexToString(metadata.functionArgs[0]));
-          relayedTransaction.value = relayedTransaction.value.toString();
-          relayedTransaction.sender = this.bech32Encode(this.base64ToHex(relayedTransaction.sender));
-          relayedTransaction.receiver = this.bech32Encode(this.base64ToHex(relayedTransaction.receiver));
-          return this.getNormalTransactionMetadata(relayedTransaction);
-        } catch (error) {
-          // nothing special
-        }
-      }
-
-      if (metadata.functionName === 'relayedTxV2' && metadata.functionArgs && metadata.functionArgs.length === 4) {
-        try {
-          const relayedTransaction = new TransactionToDecode();
-          relayedTransaction.sender = transaction.receiver;
-          relayedTransaction.receiver = this.bech32Encode(metadata.functionArgs[0]);
-          relayedTransaction.data = this.base64Encode(this.hexToString(metadata.functionArgs[2]));
-          relayedTransaction.value = '0';
-
-          return this.getNormalTransactionMetadata(relayedTransaction);
-        } catch (error) {
-          // nothing special
-        }
+        return this.getNormalTransactionMetadata(relayedTransaction);
+      } catch (error) {
+        // nothing special
       }
     }
 

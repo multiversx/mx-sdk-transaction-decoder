@@ -1,5 +1,7 @@
 import { bech32 } from "bech32";
 
+const SMART_CONTRACT_HEX_PUBKEY_PREFIX = "0".repeat(16);
+
 export class TransactionDecoder {
   getTransactionMetadata(transaction: TransactionToDecode): TransactionMetadata {
     const metadata = this.getNormalTransactionMetadata(transaction);
@@ -45,7 +47,7 @@ export class TransactionDecoder {
       metadata.functionArgs = args;
     }
 
-    if (args.length === 0) {
+    if (args.length === 0 && !this.isSmartContract(transaction.receiver)) {
       metadata.functionName = 'transfer';
       metadata.functionArgs = undefined;
     }
@@ -247,8 +249,17 @@ export class TransactionDecoder {
     return bech32.encode('erd', words);
   }
 
+  private bech32Decode(address: string): string | undefined {
+    const decoded = bech32.decodeUnsafe(address);
+    return decoded ? Buffer.from(bech32.fromWords(decoded.words)).toString('hex') : undefined;
+  }
+
   private isAddressValid(address: string): boolean {
     return Buffer.from(address, "hex").length == 32;
+  }
+
+  private isSmartContract(address: string): boolean {
+    return this.bech32Decode(address)?.startsWith(SMART_CONTRACT_HEX_PUBKEY_PREFIX) ?? false;
   }
 
   private isSmartContractArgument(arg: string): boolean {

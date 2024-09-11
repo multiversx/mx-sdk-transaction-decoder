@@ -13,7 +13,25 @@ test('Simple wallet to wallet transfer with dummy data text', () => {
     sender: 'erd18w6yj09l9jwlpj5cjqq9eccfgulkympv7d4rj6vq4u49j8fpwzwsvx7e85',
     receiver: 'erd1lkrrrn3ws9sp854kdpzer9f77eglqpeet3e3k3uxvqxw9p3eq6xqxj43r9',
     value: BigInt('10000000000000000'),
-    functionName: 'transfer'
+    functionName: 'transfer',
+  });
+});
+
+test('Smart contract call without arguments', () => {
+  const decoder = new TransactionDecoder();
+  const metadata = decoder.getTransactionMetadata({
+    sender: 'erd18w6yj09l9jwlpj5cjqq9eccfgulkympv7d4rj6vq4u49j8fpwzwsvx7e85',
+    receiver: 'erd1qqqqqqqqqqqqqpgqmua7hcd05yxypyj7sv7pffrquy9gf86s535qxct34s',
+    data: 'bXlFbmRwb2ludA==',
+    value: '0',
+  });
+
+  expect(metadata).toEqual<TransactionMetadata>({
+    sender: 'erd18w6yj09l9jwlpj5cjqq9eccfgulkympv7d4rj6vq4u49j8fpwzwsvx7e85',
+    receiver: 'erd1qqqqqqqqqqqqqpgqmua7hcd05yxypyj7sv7pffrquy9gf86s535qxct34s',
+    value: BigInt('0'),
+    functionName: 'myEndpoint',
+    functionArgs: [],
   });
 });
 
